@@ -1,6 +1,6 @@
 from ..state import State
 from ..classes.errors import ExistsError, NotFoundError, RegisterError
-from ..db.errors import FileAlreadyExistsError, WriteInDatabaseError
+from ..classes.errors.db import FileAlreadyExistsError, WriteInDatabaseError
 from ..classes import Document, Note
 
 
