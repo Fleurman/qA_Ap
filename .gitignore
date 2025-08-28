@@ -1,2 +1,5 @@
 env/
 data/llms/
+.vscode/
+.continue/
+__pycache__
