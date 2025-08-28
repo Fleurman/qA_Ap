@@ -1,0 +1,8 @@
+oyaml==1.0
+faiss-cpu==1.11.0.post1
+sentence-transformers==5.0.0
+bottle==0.13.4
+safer==5.1.0
+ollama==0.5.3
+semantic-text-splitter==0.27.0
+cerebras-cloud-sdk==1.46.0
