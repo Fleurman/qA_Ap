@@ -8,11 +8,11 @@ class qaapDB(ABC):
     # ============================== CHECK METHODS
 
     @abstractmethod
-    def post_exists(self, post_title: str) -> bool:
+    def document_exists(self, document_title: str) -> bool:
         pass
 
     @abstractmethod
-    def comment_exists(self, post_title: str, note_title: str) -> bool:
+    def comment_exists(self, document_title: str, note_title: str) -> bool:
         pass
 
     @abstractmethod
@@ -30,19 +30,19 @@ class qaapDB(ABC):
         pass
 
     @abstractmethod
-    def get_document(self, post_title: str) -> tuple[str, str]:
+    def get_document(self, document_title: str) -> str:
         pass
 
     @abstractmethod
-    def get_document_medias(self, post_title: str, includes: list[str] = []) -> list[str]:
+    def get_document_medias(self, document_title: str, includes: list[str] = []) -> list[str]:
         pass
 
     @abstractmethod
-    def get_notes_for_post(self, post_title: str, perpage: int = 0, page: int = 0) -> list[tuple[str, str, str]]:
+    def get_notes_for_document(self, document_title: str, perpage: int = 0, page: int = 0) -> list[tuple[str, str, str]]:
         pass
 
     @abstractmethod
-    def get_note_medias(self, post_title: str, note_title: str, includes: list[str] = []) -> list[str]:
+    def get_note_medias(self, document_title: str, note_title: str, includes: list[str] = []) -> list[str]:
         pass
 
     # ============================== WRITE METHODS
@@ -52,11 +52,11 @@ class qaapDB(ABC):
         pass
 
     @abstractmethod
-    def write_post(self, post_title: str, content: str, medias: list[tuple[str, str]]) -> bool:
+    def write_document(self, document_title: str, content: str, medias: list[tuple[str, str]]) -> bool:
         pass
 
     @abstractmethod
-    def write_comment(self, post_title: str, note_title: str, content: str, medias: list[tuple[str, str]]) -> bool:
+    def write_note(self, document_title: str, note_title: str, content: str, medias: list[tuple[str, str]]) -> bool:
         pass
 
     @abstractmethod

@@ -3,3 +3,5 @@ data/llms/
 .vscode/
 .continue/
 **/__pycache__/
+anyfolderdb.py
+test.ipynb
