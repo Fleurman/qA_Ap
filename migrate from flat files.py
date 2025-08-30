@@ -15,7 +15,7 @@
                     screen1.png
         ...
 
-    retrieve all posts with their name, file content and images and upload them into the qA_Ap.state.State.DATABASE
+    retrieve all posts with their name, file content and images and upload them into the qA_Ap.state.State.Database
     do the same for all comments
 
 """
@@ -59,7 +59,7 @@
 
 #         # Upload post
 #         try:
-#             qA_Ap.state.State.DATABASE.write_post(
+#             qA_Ap.state.State.Database.write_post(
 #                 post_name=post_name,
 #                 icon=icon_b64,
 #                 screenshots=screenshots,
@@ -84,7 +84,7 @@
 #                 with open(img_file, "rb") as f:
 #                     comment_screenshots.append(base64.b64encode(f.read()).decode("utf-8"))
 #             try:
-#                 qA_Ap.state.State.DATABASE.write_comment(
+#                 qA_Ap.state.State.Database.write_comment(
 #                     post_name=post_name,
 #                     commenter=commenter,
 #                     screenshots=comment_screenshots,

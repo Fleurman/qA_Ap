@@ -1,6 +1,7 @@
 from .app.catalog import compile_catalog, compile_attribute
-from .db import qaapdb, flatfiledb
-from .app.ai.methods import initialize_vector_store, query
+from .db import qaapDB, flatfiledb
+from .app.ai.methods import initialize_vector_store
+from .app.ai.methods import query as _query
 from .app.ai.interfaces import AIInterface, ollama
 from .web.api import server as _server
 from .web import activate_integrated_frontend
@@ -57,7 +58,7 @@ default_system_prompt = """
 """
 
 def init(
-        database: str | qaapdb.qaapDB = "data/qaap_db",
+        database: str | qaapDB = "data/qaap_db",
         ai: AIInterface | str = "qwen3:0.6b",
         embeddings_model: str = "Qwen3-Embedding-0.6B",
         object_of_search: str = "solutions",
@@ -92,16 +93,16 @@ def init(
     SETTINGS.SYSTEM_PROMPT = system_prompt
     SETTINGS.OBJECT_OF_SEARCH = object_of_search
 
-    if isinstance(database, qaapdb.qaapDB):
-        _State.DATABASE = database
+    if isinstance(database, qaapDB):
+        _State.Database = database
     elif isinstance(database, str):
-        _State.DATABASE = flatfiledb.FlatFileDB(database)
+        _State.Database = flatfiledb.FlatFileDB(database)
     pass
 
     if isinstance(ai, AIInterface):
-        _State.AIINTERFACE = ai
+        _State.AIInterface = ai
     elif isinstance(ai, str):
-        _State.AIINTERFACE = ollama.OllamaAIInterface(model_name=ai)
+        _State.AIInterface = ollama.OllamaAIInterface(model_name=ai)
     pass
 
     if allow_post == True:
@@ -131,8 +132,8 @@ def init(
 """
 aliases for easier imports
 """
-database = _State.DATABASE
-# query = query
+state = _State
+query = _query
 server = _server
 
 

@@ -7,13 +7,13 @@
 # from qA_Ap.app.ai.ollama import OllamaAIInterface
 # from qA_Ap.app.ai.cerebras import CerebrasAIInterface
 
-# qA_Ap.state.State.DATABASE = BaseRowFreeApiDB("tyesLJsYXhYHyR2LBI2jZcUG711W1iUu")
-# # qA_Ap.state.State.DATABASE = FlatFileDB("db")
-# qA_Ap.state.State.AIINTERFACE = CerebrasAIInterface(
+# qA_Ap.state.State.Database = BaseRowFreeApiDB("tyesLJsYXhYHyR2LBI2jZcUG711W1iUu")
+# # qA_Ap.state.State.Database = FlatFileDB("db")
+# qA_Ap.state.State.AIInterface = CerebrasAIInterface(
 #     key="csk-pt2x2jd9yrvddfr92rp4wx4fvd2wkfv8mjewvp3t59f4vyvk", 
 #     model_name="llama3.1-8b"
 # )
-# # qA_Ap.state.State.AIINTERFACE = OllamaAIInterface("qwen3:0.6B")
+# # qA_Ap.state.State.AIInterface = OllamaAIInterface("qwen3:0.6B")
 
 
 # compile_catalog()

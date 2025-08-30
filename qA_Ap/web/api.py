@@ -3,13 +3,15 @@ from pathlib import Path
 
 import oyaml
 from pdoc import pdoc
-from bottle import Bottle, response, request, HTTPResponse
+from bottle import Bottle, response, request, HTTPResponse, static_file
 
 from ..state import State
 from ..classes import Document, Note
 from ..settings import SETTINGS
 from ..app.ai.methods import query
 from ..app.catalog import compile_catalog, compile_attribute
+
+CURRENT_PATH = Path(__file__).parent.resolve()
 
 server = Bottle()
 """ 
@@ -77,7 +79,7 @@ def get_docs() -> str:
     Returns the api documentation generated with [**pDoc**](https://pdoc.dev/).
 
     """
-    return pdoc(Path(__file__).resolve())
+    return static_file("api_docs.html", root=CURRENT_PATH)
 
 # ============================================================== GET ENDPOINTS
 
@@ -109,7 +111,7 @@ def get_catalog() -> str:
     response.headers['Content-Type'] = 'application/json'
     response.headers['Cache-Control'] = 'no-cache'
     try:
-        return State.DATABASE.get_catalog()
+        return State.Database.get_catalog()
     except Exception as e:
         response.status = 500
         return json.dumps({"error": str(e)})
@@ -142,7 +144,7 @@ def get_document_by_name(name: str) -> str:
     response.headers['Content-Type'] = 'application/json'
     response.headers['Cache-Control'] = 'no-cache'
     try:
-        document, icon = State.DATABASE.get_document(name)
+        document, icon = State.Database.get_document(name)
         return json.dumps(Document.from_text(name, document).dict)
     except Exception as e:
         response.status = 404
@@ -177,7 +179,7 @@ def get_notes_for_post(post_title: str) -> str:
     response.headers['Content-Type'] = 'application/json'
     response.headers['Cache-Control'] = 'no-cache'
     try:
-        notes = State.DATABASE.get_notes_for_post(post_title)
+        notes = State.Database.get_notes_for_post(post_title)
         return json.dumps([Note.from_text(note_title, document, content).dict for (content, document, note_title) in notes])
     except Exception as e:
         response.status = 500
@@ -206,7 +208,7 @@ def get_attributes(attribute_name: str) -> str:
     """
     response.headers['Content-Type'] = 'application/json'
     try:
-        cats = State.DATABASE.get_attribute_values(attribute_name).split("\n")
+        cats = State.Database.get_attribute_values(attribute_name).split("\n")
         return json.dumps(cats)
     except Exception as e:
         response.status = 500
@@ -276,7 +278,7 @@ def post_post() -> str:
         if metadatas:
             yaml_metas = oyaml.safe_dump(metadatas)
             content = f"{yaml_metas}\n###\n\n{content}"
-        State.DATABASE.write_post(title, content, data.get("medias", []))
+        State.Database.write_post(title, content, data.get("medias", []))
         return json.dumps({"message": f"The document {title} is created"})
     except Exception as e:
         response.status = 500
@@ -334,7 +336,7 @@ def post_comment() -> str:
             yaml_metas = oyaml.safe_dump(metadatas)
             content = f"{yaml_metas}\n###\n\n{content}"
 
-        State.DATABASE.write_comment(
+        State.Database.write_comment(
             post_title = post_title, 
             note_title = note_title, 
             content = content, 
@@ -391,7 +393,7 @@ def post_attribute() -> str:
         attribute = data["attribute"]
         values = data.get("values", [])
 
-        State.DATABASE.add_attribute_values(attribute, values)
+        State.Database.add_attribute_values(attribute, values)
 
         return json.dumps({"message": f"attribute '{attribute}' registered"})
     

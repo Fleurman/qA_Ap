@@ -13,13 +13,13 @@ def compile_catalog() -> None:
             RuntimeError: If there is an error during compilation.
     """
     try:
-        data: list[dict[str, str]] = State.DATABASE.get_all_documents_data()
+        data: list[dict[str, str]] = State.Database.get_all_documents_data()
 
         documents: list[dict] = [
             Document.from_text(raw["title"], raw["content"]).catalog_entry for raw in data
         ]
     
-        State.DATABASE.write_catalog(json.dumps(documents))
+        State.Database.write_catalog(json.dumps(documents))
     except Exception as e:
         raise RuntimeError(f"Failed to compile catalog: {str(e)}")
 
@@ -33,7 +33,7 @@ def compile_attribute(attribute: str) -> None:
             RegisterError: If there is an error during compilation or writing.
     """
     try:
-        catalog = json.loads(State.DATABASE.get_catalog())
+        catalog = json.loads(State.Database.get_catalog())
         values: list[list[str]|str] = [document["metadatas"][attribute] for document in catalog if (attribute in document["metadatas"])]
         
         flattened = []
@@ -46,7 +46,7 @@ def compile_attribute(attribute: str) -> None:
 
         unique_values = set(flattened)
 
-        State.DATABASE.write_attribute(attribute, "\n".join(unique_values))
+        State.Database.write_attribute(attribute, "\n".join(unique_values))
     except Exception as e:
         raise RuntimeError(f"Failed to compile attribute '{attribute}' values: {str(e)}")
     
@@ -68,7 +68,7 @@ def find_documents_by_metadata(attribute: str, value: str) -> list[dict]:
             RegisterError: If there is an error during the search.
     """
     try:
-        catalog = json.loads(State.DATABASE.get_catalog())
+        catalog = json.loads(State.Database.get_catalog())
         results = [
             document for document in catalog
             if attribute in document["metadatas"] and value in document["metadatas"][attribute]

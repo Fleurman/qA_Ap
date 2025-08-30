@@ -4,8 +4,8 @@ from pathlib import Path
 
 import safer
 
-from .errors import FileAlreadyExistsError, WriteInDatabaseError
-from .qaapdb import qaapDB
+from ..classes.errors.db import FileAlreadyExistsError, WriteInDatabaseError
+from . import qaapDB
 from ..classes import Document
 
 class FlatFileDB(qaapDB):

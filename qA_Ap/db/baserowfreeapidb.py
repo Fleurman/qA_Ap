@@ -2,11 +2,11 @@ from enum import StrEnum
 import requests
 import json
 
-from .errors import FileAlreadyExistsError, WriteInDatabaseError
-from .ottoDB import ottoDB
 from ..classes import Document
+from ..classes.errors.db import FileAlreadyExistsError, WriteInDatabaseError
+from . import qaapDB
 
-class BaseRowFreeApiDB(ottoDB):
+class BaseRowFreeApiDB(qaapDB):
 
     class TABLES(StrEnum):
         POSTS = "646003"
@@ -23,7 +23,7 @@ class BaseRowFreeApiDB(ottoDB):
             Args:
                 token (str): The API token for authentication with the BaseRow API.
         """
-        ottoDB.__init__(self)
+        qaapDB.__init__(self)
         self.token = token
 
     def _filter_by_fields_value(self, fields: list[tuple[str,str]], orfields: list[tuple[str,str]] = []) -> str:

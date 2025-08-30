@@ -21,17 +21,6 @@ window.onBoot.push(()=>{
     },1000)
 });
 
-const messageInput = document.getElementById('message-input');
-const chatInput = document.getElementById('chat-input');
-
-messageInput.addEventListener('focus', function() {
-    chatInput.classList.add('focus');
-});
-
-messageInput.addEventListener('blur', function() {
-    chatInput.classList.remove('focus');
-});
-
 // ===============================================================================================
 
 // Main application class
@@ -381,7 +370,7 @@ class QAAPApp {
             const role = message.classList.contains('user-message') ? 'user' : 'assistant';
             const content = message.querySelector('p').textContent;
 
-            history.push({ role, content });
+            history.push({ role:role, content:content });
         }
 
         return history;

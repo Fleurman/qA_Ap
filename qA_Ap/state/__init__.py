@@ -1,17 +1,16 @@
-from ..db.qaapdb import qaapDB
-from ..app.ai.vectorstore import VectorStore
-# from ..app.ai.AIInterface import AIInterface
-# from ..app.catalog import Catalog
+from ..db import qaapDB
+from ..app.ai import VectorStore
+from ..app.ai.interfaces import AIInterface
 
 class State():
     """
         This class stores the active objects needed accross the application.
         
-        - DATABASE is a database instance used for all files related processes
-        - VECTORSTORE is the database of embeddings used by langchain for the RAG functionalities
+        - Database is a qA_Ap.db.qaapDB instance used as database.
+        - AIInterface is a qA_Ap.app.ai.interfaces.AIInterface used to query a LMM.
+        - VectorStore is The qA_Ap.app.ai.VectorStore instance used to store embedded documents and retrieve them by similarity search
     """
-    DATABASE: qaapDB = None
-    AIINTERFACE = None
-    VECTORSTORE: VectorStore = None
-    CATALOG  = None
+    Database: qaapDB = None
+    AIInterface: "AIInterface" = None
+    VectorStore: "VectorStore" = None
 
