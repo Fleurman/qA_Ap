@@ -11,6 +11,32 @@ Supports an all local setup with a flat file database and **Ollama** to a totall
 
 An optional API server _(bottle.py)_ with custom authentication and an integrated frontend is available to query your documents simply and immediately.
 
+### Architecture
+
+
+```mermaid
+---
+config:
+  layout: fixed
+---
+flowchart TD
+    A["View"] -- GET/POST data<br>POST query --> B("API server")
+    B <--> C["qA_Ap Core"]
+    C -- <br> --> D["AI Interface"]
+    A <-- search and filter --> n2["catalog.json"]
+    B <-- store/retrieve<br>(only strings) --> n1["Database<br>interface"]
+    n1 <--> n3["&lt;actual database&gt;"]
+    D --> n4["&lt;actual LLM provider&gt;"]
+    A@{ shape: rect}
+    C@{ shape: rect}
+    D@{ shape: rounded}
+    n2@{ shape: card}
+    n1@{ shape: cyl}
+    n3@{ shape: text}
+    n4@{ shape: text}
+    style A stroke:#000000,stroke-width:4px,stroke-dasharray: 0,color:#000000
+```
+
 ## 📦 Key Dependencies
 
 ```ini
