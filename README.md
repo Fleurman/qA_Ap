@@ -13,11 +13,18 @@ An optional API server _(bottle.py)_ with custom authentication and an integrate
 
 ### Architecture
 
-The logic of this package is to search trough Documents 
+The logic of this package is to query an LLM to find Documents via RAG and expose them in the response.
+The main purpose would be to ask for solutions or informations for a certain need and have a nice response that presents a set of tools or solutions with direct links when possible.
 
-This package is made with a frontend focus. The main idea is to compile a `catalog.json` _(containing title, short description and metadata of all documents)_ and use this json to do the search and filtering in the view then query the API for complete document _(and notes)_ when needed.
+A Document is defined as a qA_Ap.classes.Document class that consists of a text content, a title, any metadata and any medias.
 
+Support for Notes (qA_Ap.classes.Note) is implemented though quite minimal at this time. Each document can have multiple Notes wich consists of a title, a text content, any metadata and any medias.
 
+As this package is made with a frontend focus the compiles a `catalog.json` _(containing title, short description and metadata of all documents)_ that should be used to do the search and filtering in the view then query the API for complete a document _(and its notes)_ when needed.
+
+Along with the catalog, indexes can be compiled for each unique values of a given metadata field. This is useful to get directly the list of all existing values for a document attribute. _(i.e. your documents can have a `tag` field and indexing the tag attribute creates a list of all existing tags value that you can use to filter, display or populate a selection dropdown...)_
+
+For a better customization, the database and LLM are modulars. Implement your own `qA_Ap.db.qaapDB` class or `qA_Ap.app.ai.AIInterface` to suit your needs. Each of these classes are totally ignorant of the rest of the app and should only takes and returns native python types.
 
 ```mermaid
 ---
@@ -86,6 +93,8 @@ qA_Ap.web.api # API server
 
 ## 🛠️ How to use
 
+You can find a raw documentation [here](https://martin.surlesinternets.ch/qA_Ap/docs/) _(it will be refined)_
+
 ### Python Setup
 1. Install Python v3.10+ _(3.12 recommended)_
 2. Create a virtual environment: `python -m venv venv`
@@ -142,10 +151,12 @@ The **globals** module contains globals variables used accross the app:
 - **database**: the current `qA_Ap.db.qaapDB` class instance used a database
 - **ai_interface**: The current `qA_Ap.app.ai.interfaces.AIInterface` class instance used to query the LLM
 - **vectorstore**: The `qA_Ap.app.ai.VectorStore` class instance used to store embedded documents and retrieve them by similarity search
+- **path_to_emmbeddings_model**: The path (local or HuggingFace) to the embeddings model used to vectorize the documents and the query
+- **system_prompt**: The system prompt for each LLM query _(must contain the interpolated fields {context},{history} and {object_of_search})_
+- **object_of_search**: The specific naming of what the LMM should find for you. Is interpolated in the system_prompt.
 
 
-
-the `qA_Ap` package has two useful aliases:
+the `qA_Ap` package has four useful aliases:
 
 #### qA_Ap.query
 
@@ -169,7 +180,26 @@ def query(
 The [Bottle.py](https://bottlepy.org/docs/dev/) server instance that runs the API _(and the optional integrated frontend)_
 
 
-### 
+#### qA_Ap.compile_catalog
+
+This method will compile each documents and write the `catalog.json` file.
+
+#### qA_Ap.compile_attribute
+
+This method takes an attribute_name _(str)_ and reads each unique attribute values for the given attribute name from the `catalog.json` file and write the according `<attribute_name>.txt`.
+
+## 🚀 Roadmap
+
+These are the planned improvements and features:
+
+⬜ Includes the Notes content in the vectorstore
+
+⬜ Write a detailled documentation and github wiki
+
+⬜ Develop a totally frontend solution with transformers.js
+
+⬜ Develop a Flet interface to query your local documents
+
 
 ## 👥 Contributing
 
