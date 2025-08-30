@@ -5,6 +5,8 @@
 
 ## 📝 Description
 
+<img src="logo.png" alt="The qA_Ap logo" width="200" height="200"> 
+
 This package is a simple solution for implementing a **Retrieval Augmented Generation** _(RAG)_ on custom documents. The database and LLM interfaces are modular.
 
 Supports an all local setup with a flat file database and **Ollama** to a totally cloud based setup with a **Baserow** database and **Cerebras** _(both free to use)_.

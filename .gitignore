@@ -3,5 +3,6 @@ data/llms/
 .vscode/
 .continue/
 **/__pycache__/
-anyfolderdb.py
 test.ipynb
+README-PYPI.md
+diagram.png
