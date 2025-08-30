@@ -30,8 +30,7 @@ class OllamaAIInterface(AIInterface):
             model=self.model_name,
             think=True,
             messages=messages,
-            stream=True,
-            history=self.format_history(history)
+            stream=True
         )
 
         return OllamaAIStreamResponse(stream, metadatas)

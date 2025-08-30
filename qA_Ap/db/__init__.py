@@ -12,7 +12,7 @@ class qaapDB(ABC):
         pass
 
     @abstractmethod
-    def comment_exists(self, document_title: str, note_title: str) -> bool:
+    def note_exists(self, document_title: str, note_title: str) -> bool:
         pass
 
     @abstractmethod

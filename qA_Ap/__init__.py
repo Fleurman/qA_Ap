@@ -5,7 +5,7 @@ from .app.ai.methods import query as _query
 from .app.ai.interfaces import AIInterface, ollama
 from .web.api import server as _server
 from .web import activate_integrated_frontend
-import globals
+from .globals import globals
 
 
 """
@@ -32,8 +32,6 @@ Modules:
 
 """
 
-
-
 default_system_prompt = """
     You are an assistant for question-answering tasks.
     Your role is to guide the user to find {object_of_search} for its need.
@@ -51,12 +49,12 @@ default_system_prompt = """
 def init(
         database: str | qaapDB = "data/qaap_db",
         ai: AIInterface | str = "qwen3:0.6b",
-        embeddings_model: str = "Qwen3-Embedding-0.6B",
+        embeddings_model: str = "Qwen/Qwen3-Embedding-0.6B",
         object_of_search: str = "solutions",
         system_prompt: str = default_system_prompt,
         api_server: int | dict = 8080,
         allow_post: bool = False,
-        frontend: bool = False,
+        frontend: bool = True,
         catalog: bool = True,
         attributes: list[str] = None
 ):
@@ -80,6 +78,8 @@ def init(
     Returns:
         None
     """
+    global globals
+
     globals.path_to_emmbeddings_model = embeddings_model
     globals.system_prompt = system_prompt
     globals.object_of_search = object_of_search

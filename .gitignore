@@ -6,3 +6,4 @@ data/llms/
 test.ipynb
 README-PYPI.md
 diagram.png
+pyproject.toml
