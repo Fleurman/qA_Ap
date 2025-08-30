@@ -5,8 +5,7 @@ from .app.ai.methods import query as _query
 from .app.ai.interfaces import AIInterface, ollama
 from .web.api import server as _server
 from .web import activate_integrated_frontend
-from .state import State as _State
-from .settings import SETTINGS
+import globals
 
 
 """
@@ -14,29 +13,21 @@ from .settings import SETTINGS
   qA_Ap - query About Anything package
 ========================================
 
+Author: Martin Ashton-Lomax
+Github: https://github.com/Fleurman/qA_Ap
+License: MIT
+Version: 0.1
+
+========================================
+
 A Q&A application powered by LLMs and RAG on custom data.
-
-This package is a modular and quick to setup solution. 
-
-# How to run it
-
-    The simplest way to start quering about your documents is to call the `init()` function.
-
-
-
-
-# Modularity:
-    ## Database
-        The Database is passed 
-
-
 
 Modules:
 - db: Database interfaces and implementations.
 - app: Core application logic including AI interactions and catalog management.
 - api: API server for handling requests.
 - state: Global state management.
-- classes: Data structures for documents, notes, and errors.
+- classes: Data structures and errors.
 - settings: Configuration settings for the application.
 
 """
@@ -89,20 +80,20 @@ def init(
     Returns:
         None
     """
-    SETTINGS.PATH_TO_EMMBEDDINGS_MODEL = embeddings_model
-    SETTINGS.SYSTEM_PROMPT = system_prompt
-    SETTINGS.OBJECT_OF_SEARCH = object_of_search
+    globals.path_to_emmbeddings_model = embeddings_model
+    globals.system_prompt = system_prompt
+    globals.object_of_search = object_of_search
 
     if isinstance(database, qaapDB):
-        _State.Database = database
+        globals.database = database
     elif isinstance(database, str):
-        _State.Database = flatfiledb.FlatFileDB(database)
+        globals.database = flatfiledb.FlatFileDB(database)
     pass
 
     if isinstance(ai, AIInterface):
-        _State.AIInterface = ai
+        globals.ai_interface = ai
     elif isinstance(ai, str):
-        _State.AIInterface = ollama.OllamaAIInterface(model_name=ai)
+        globals.ai_interface = ollama.OllamaAIInterface(model_name=ai)
     pass
 
     if allow_post == True:
@@ -130,9 +121,8 @@ def init(
 
 
 """
-aliases for easier imports
+aliases
 """
-state = _State
 query = _query
 server = _server
 

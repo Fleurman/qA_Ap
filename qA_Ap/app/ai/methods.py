@@ -1,5 +1,4 @@
-from ...state import State
-from ...settings import SETTINGS
+from ...globals import system_prompt, object_of_search, database, vectorstore, ai_interface
 from . import VectorStore
 from .interfaces import AIStreamResponse
 
@@ -11,10 +10,10 @@ def vectorize_documents() -> None:
         RuntimeError: If vectorization or saving fails.
     """
     try:
-        documents = State.Database.get_all_documents_data()
+        documents = database.get_all_documents_data()
         print(f"{len(documents)} documents")
-        State.VectorStore = VectorStore(documents)
-        State.Database.write_vector_store(State.VectorStore.as_bytes)
+        vectorstore = VectorStore(documents)
+        database.write_vector_store(vectorstore.as_bytes)
         print("Vector store saved")
     except Exception as e:
         raise RuntimeError(f"Failed to vectorize documents: {e}")
@@ -25,8 +24,8 @@ def initialize_vector_store() -> None:
     Initializes the vector store from the database, or creates it if not found or fails.
     """
     try:
-        bytes_data = State.Database.get_vector_store()
-        State.VectorStore = VectorStore.from_bytes(bytes_data)
+        bytes_data = database.get_vector_store()
+        vectorstore = VectorStore.from_bytes(bytes_data)
         print(f"Vector store loaded.")
     except Exception as e:
         print(f"Failed to load vector store: {e}. Rebuilding vector store.")
@@ -85,16 +84,16 @@ def query(query: str, history: list[dict[str,str]] = None, include_metadata: boo
         RuntimeError: If querying or LLM generation fails.
     """
     try:
-        if not hasattr(State, "VectorStore") or State.VectorStore is None:
+        if vectorstore is None:
             raise RuntimeError("Vector store is not initialized.")
-        results = State.VectorStore.query(query)
-        prompt = SETTINGS.SYSTEM_PROMPT.format(
-            object_of_search=SETTINGS.OBJECT_OF_SEARCH,
+        results = vectorstore.query(query)
+        prompt = system_prompt.format(
+            object_of_search = object_of_search,
             context=_context_from_query_results(results),
             question=query
         )
         metadatas = _metadata_from_query_results(results) if include_metadata else None
-        response: AIStreamResponse = State.AIInterface.query(prompt,history,metadatas)
+        response: AIStreamResponse = ai_interface.query(prompt,history,metadatas)
         return response
     except Exception as e:
         raise RuntimeError("An error occurred while processing your query.")

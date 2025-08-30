@@ -13,6 +13,11 @@ An optional API server _(bottle.py)_ with custom authentication and an integrate
 
 ### Architecture
 
+The logic of this package is to search trough Documents 
+
+This package is made with a frontend focus. The main idea is to compile a `catalog.json` _(containing title, short description and metadata of all documents)_ and use this json to do the search and filtering in the view then query the API for complete document _(and notes)_ when needed.
+
+
 
 ```mermaid
 ---
@@ -20,7 +25,7 @@ config:
   layout: fixed
 ---
 flowchart TD
-    A["View"] -- GET/POST data<br>POST query --> B("API server")
+    A["View"] -- GET/POST data<br>POST query <--> B("API server")
     B <--> C["qA_Ap Core"]
     C -- <br> --> D["AI Interface"]
     A <-- search and filter --> n2["catalog.json"]
@@ -34,7 +39,6 @@ flowchart TD
     n1@{ shape: cyl}
     n3@{ shape: text}
     n4@{ shape: text}
-    style A stroke:#000000,stroke-width:4px,stroke-dasharray: 0,color:#000000
 ```
 
 ## 📦 Key Dependencies
@@ -110,7 +114,19 @@ Customize your setup with these parameters:
 
 - **object_of_search** _(str, optional)_: The object of search. Will be replaced in the  system_prompt. Defaults to `"solutions"`.
 
-- **system_prompt** _(str, optional)_: The system prompt to use. Defaults to `qA_Ap.default_system_prompt`.
+- **system_prompt** _(str, optional)_: The system prompt to use. Defaults to `qA_Ap.default_system_prompt`: 
+>   
+    You are an assistant for question-answering tasks.
+    Your role is to guide the user to find {object_of_search} for its need.
+    Use the following pieces of retrieved context to answer the question if it matches the user needs.
+    Do not mention any context that do not matches the question.
+    Use your general knowledge if the context is lacking.
+    Use the same language as the question and keep the answer concise.
+    After your answer, list all relevant documents name between brackets.
+
+    Question: {question} 
+    Context: {context}
+    Answer:
 
 - **api_server** _(int | dict | False, optional)_: The port on wich to run the API server (bottle.py). If a dictionary is provided, it will be used as the server configuration. If False the server is not run. Defaults to `8080`.
 
@@ -120,14 +136,16 @@ Customize your setup with these parameters:
 
 ### Core objects
 
-the `qA_Ap` package has three useful aliases:
+#### qA_Ap.globals
 
-#### qA_Ap.State
+The **globals** module contains globals variables used accross the app:
+- **database**: the current `qA_Ap.db.qaapDB` class instance used a database
+- **ai_interface**: The current `qA_Ap.app.ai.interfaces.AIInterface` class instance used to query the LLM
+- **vectorstore**: The `qA_Ap.app.ai.VectorStore` class instance used to store embedded documents and retrieve them by similarity search
 
-The **State** class contains globals variables used accross the app:
-- **Database**: the current `qA_Ap.db.qaapDB` class instance used a database
-- **AIInterface**: The current `qA_Ap.app.ai.interfaces.AIInterface` class instance used to query the LLM
-- **Vectorstore**: The `qA_Ap.app.ai.VectorStore` class instance used to store embedded documents and retrieve them by similarity search
+
+
+the `qA_Ap` package has two useful aliases:
 
 #### qA_Ap.query
 

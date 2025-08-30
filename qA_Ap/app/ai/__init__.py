@@ -6,7 +6,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from semantic_text_splitter import TextSplitter
 
-from ...settings import SETTINGS
+from ...globals import path_to_emmbeddings_model
 
 class VectorStore():
     """
@@ -21,7 +21,7 @@ class VectorStore():
             documents (list[dict[str, str]], optional): List of documents with 'title' and 'content'.
         """
         try:
-            self.model = SentenceTransformer(SETTINGS.PATH_TO_EMMBEDDINGS_MODEL)
+            self.model = SentenceTransformer(path_to_emmbeddings_model)
         except Exception as e:
             raise RuntimeError(f"Failed to load embedding model: {str(e)}")
         if documents:

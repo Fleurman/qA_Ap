@@ -1,4 +1,4 @@
-from ..state import State
+from ..globals import database
 from ..classes.errors import ExistsError, NotFoundError, RegisterError
 from ..classes.errors.db import FileAlreadyExistsError, WriteInDatabaseError
 from ..classes import Document, Note
@@ -19,7 +19,7 @@ def register_new_attribute_value(attribute: str, value: str) -> bool:
             RegisterError: If there is an error during registration.
     """
     try:
-        State.Database.add_attribute_values(attribute, value)
+        database.add_attribute_values(attribute, value)
     except Exception as e:
         raise RegisterError(f"Failed to register attribute '{attribute}' with new value '{value}': {str(e)}")
 
@@ -42,7 +42,7 @@ def register_new_comment(note: Note) -> bool:
             RegisterError: If there is an error during registration.
     """
     try:
-        State.Database.write_comment(
+        database.write_comment(
             note.document, note.note_title, note.metadatas, note.text
         )
     except FileAlreadyExistsError as e:
@@ -70,7 +70,7 @@ def register_new_post(document :Document) -> bool:
             RegisterError: If there is an error during registration.
     """
     try:
-        State.Database.write_post(
+        database.write_post(
             document.title, document.icon, document.metadatas, document.content
         )
     except FileNotFoundError as e:

@@ -5,8 +5,8 @@ from pathlib import Path
 import safer
 
 from ..classes.errors.db import FileAlreadyExistsError, WriteInDatabaseError
-from . import qaapDB
 from ..classes import Document
+from . import qaapDB
 
 class FlatFileDB(qaapDB):
     def __init__(self, root: int):
