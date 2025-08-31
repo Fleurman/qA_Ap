@@ -188,7 +188,7 @@ class BaseRowFreeApiDB(qaapDB):
                 NotImplementedError: This method is not implemented.
         """
         try:
-            response = requests.document(
+            response = requests.post(
                 f"https://api.baserow.io/api/database/rows/table/{table}/{"batch/" if batchmode else ""}?user_field_names=true",
                 headers={
                     "Authorization": f"Token {self.token}",
