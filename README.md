@@ -200,7 +200,7 @@ These are the planned improvements and features:
 
 ⬜ Develop a totally frontend solution with transformers.js
 
-⬜ Develop a Flet interface to query your local documents
+⬜ Develop a Flet interface to manage your qA_Ap app
 
 
 ## 👥 Contributing
