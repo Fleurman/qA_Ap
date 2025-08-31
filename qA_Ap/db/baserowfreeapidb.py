@@ -242,7 +242,7 @@ class BaseRowFreeApiDB(qaapDB):
                 bool: True if the document exists, False otherwise.
         """
         result = self._get(
-            table=self.self.tables.DOCUMENTS,
+            table=self.tables.DOCUMENTS,
             include=["document_title"],
             filters=[("document_title", document_title)]
         )
@@ -260,7 +260,7 @@ class BaseRowFreeApiDB(qaapDB):
                 bool: True if the note exists, False otherwise.
         """
         result = self._get(
-            table=self.self.tables.NOTES,
+            table=self.tables.NOTES,
             include=["note_title", "document_title"],
             filters=[("document_title", document_title), ("note_title", note_title)]
         )
@@ -282,7 +282,7 @@ class BaseRowFreeApiDB(qaapDB):
         result = False
 
         attributes = self._get(
-            table=self.self.tables.SUMMARIES,
+            table=self.tables.SUMMARIES,
             filters=[("filename", attribute)]
         )
         
@@ -309,7 +309,7 @@ class BaseRowFreeApiDB(qaapDB):
         """
 
         lines = self._get(
-            table=self.self.tables.SUMMARIES,
+            table=self.tables.SUMMARIES,
             filters=[("filename", "catalog")]
         )
         if len(lines) > 0:
@@ -330,7 +330,7 @@ class BaseRowFreeApiDB(qaapDB):
         """
 
         lines = self._get(
-            table=self.self.tables.SUMMARIES,
+            table=self.tables.SUMMARIES,
             filters=[("filename", attribute)]
         )
         if len(lines) > 0:
@@ -355,7 +355,7 @@ class BaseRowFreeApiDB(qaapDB):
         document_content = ""
         icon = ""
         documents = self._get(
-            table=self.self.tables.DOCUMENTS,
+            table=self.tables.DOCUMENTS,
             filters=[("title", document_title)]
         )
         if len(documents) > 0:
@@ -383,7 +383,7 @@ class BaseRowFreeApiDB(qaapDB):
 
         orfilters = [("filename", file_stem) for file_stem in includes] if includes else []
         medias = self._get(
-            table=self.self.tables.DOCUMENTS_MEDIAS,
+            table=self.tables.DOCUMENTS_MEDIAS,
             filters=[("document_title", document_title)],
             orfilters=orfilters
         )
@@ -409,7 +409,7 @@ class BaseRowFreeApiDB(qaapDB):
         """
         
         notes = self._get(
-            table=self.self.tables.NOTES,
+            table=self.tables.NOTES,
             filters=[("document_title", document_title)],
             size=perpage if perpage > 0 else None,
             page=page,
@@ -441,7 +441,7 @@ class BaseRowFreeApiDB(qaapDB):
 
         orfilters = [("filename", file_stem) for file_stem in includes] if includes else []
         medias = self._get(
-            table=self.self.tables.NOTES_MEDIAS,
+            table=self.tables.NOTES_MEDIAS,
             filters=[("document_title", document_title), ("note_title", note_title)],
             orfilters=orfilters
         )
@@ -467,7 +467,7 @@ class BaseRowFreeApiDB(qaapDB):
         """
         
         rows = self._get(
-            table=self.self.tables.SUMMARIES,
+            table=self.tables.SUMMARIES,
             include=["filename"],
             filters=[("filename","catalog")]
         )
@@ -475,14 +475,14 @@ class BaseRowFreeApiDB(qaapDB):
         if len(rows) > 0:
             row_id = rows[0]["id"]
             response = self._update(
-                table=self.self.tables.SUMMARIES,
+                table=self.tables.SUMMARIES,
                 row_id=row_id,
                 field_name="content",
                 content= json
             )
         else:
             response = self._post(
-                table=self.self.tables.SUMMARIES,
+                table=self.tables.SUMMARIES,
                 body={
                     "filename": "content",
                     "content": json
@@ -516,7 +516,7 @@ class BaseRowFreeApiDB(qaapDB):
             raise FileAlreadyExistsError()
         
         response = self._post(
-            table=self.self.tables.DOCUMENTS,
+            table=self.tables.DOCUMENTS,
             body={
                 "title": document_title,
                 "content": content
@@ -527,7 +527,7 @@ class BaseRowFreeApiDB(qaapDB):
             raise WriteInDatabaseError(f"Error writing document: {response.status_code} - {response.text} - {response.url}")
         
         medias_response = self._post(
-            table=self.self.tables.DOCUMENTS_MEDIAS,
+            table=self.tables.DOCUMENTS_MEDIAS,
             body={
                 "items":[
                     {
@@ -574,7 +574,7 @@ class BaseRowFreeApiDB(qaapDB):
             raise FileAlreadyExistsError(f"The note by {note_title} on the document {document_title} already exists.")
 
         response = self._post(
-            table=self.self.tables.NOTES,
+            table=self.tables.NOTES,
             body={
                 "document_title": document_title,
                 "note_title": note_title,
@@ -586,7 +586,7 @@ class BaseRowFreeApiDB(qaapDB):
             raise WriteInDatabaseError(f"Error writing note: {response.status_code} - {response.text} - {response.url}")
 
         medias_response = self._post(
-            table=self.self.tables.NOTES_MEDIAS,
+            table=self.tables.NOTES_MEDIAS,
             body={
                 "items": [
                     {
@@ -623,7 +623,7 @@ class BaseRowFreeApiDB(qaapDB):
         """
 
         rows = self._get(
-            table=self.self.tables.SUMMARIES,
+            table=self.tables.SUMMARIES,
             include=["filename"],
             filters=[("filename",attribute)]
         )
@@ -631,14 +631,14 @@ class BaseRowFreeApiDB(qaapDB):
         if len(rows) > 0:
             row_id = rows[0]["id"]
             response = self._update(
-                table=self.self.tables.SUMMARIES,
+                table=self.tables.SUMMARIES,
                 row_id=row_id,
                 field_name="content",
                 content= data
             )
         else:
             response = self._post(
-                table=self.self.tables.SUMMARIES,
+                table=self.tables.SUMMARIES,
                 body={
                     "filename":attribute,
                     "content":data
@@ -690,7 +690,7 @@ class BaseRowFreeApiDB(qaapDB):
         docs = []
 
         documents = self._get(
-            table=self.self.tables.DOCUMENTS
+            table=self.tables.DOCUMENTS
         )
         if len(documents) > 0:
             for document in documents:
@@ -720,7 +720,7 @@ class BaseRowFreeApiDB(qaapDB):
                 FileNotFoundError: If the vector store is not found in the database.
         """
         rows = self._get(
-            table=self.self.tables.RAG,
+            table=self.tables.RAG,
             filters=[("filename", "store")]
         )
         if len(rows) > 0:
@@ -744,20 +744,20 @@ class BaseRowFreeApiDB(qaapDB):
                 WriteInDatabaseError: If there is an error writing to the vector store.
         """
         rows = self._get(
-            table=self.self.tables.RAG,
+            table=self.tables.RAG,
             filters=[("filename", "store")]
         )
         if len(rows) > 0:
             row_id = rows[0]["id"]
             response = self._update(
-                table=self.self.tables.RAG,
+                table=self.tables.RAG,
                 row_id=row_id,
                 field_name="content",
                 content= bytes_data.hex()
             )
         else:
             response = self._post(
-                table=self.self.tables.RAG,
+                table=self.tables.RAG,
                 body={
                     "filename": "store",
                     "content": bytes_data.hex()
