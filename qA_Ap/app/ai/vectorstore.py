@@ -3,10 +3,13 @@ import pickletools
 import json
 import faiss
 import numpy as np
+from dataclasses import dataclass
 from sentence_transformers import SentenceTransformer
 from semantic_text_splitter import TextSplitter
 
-class VectorStore():
+from . import VectorStore,VectorStoreData
+
+class FaissVectorStore(VectorStore):
     """
     A class for storing and querying document embeddings using FAISS and SentenceTransformer.
     """
@@ -136,22 +139,22 @@ class VectorStore():
             bytes: Serialized vector store.
         """
         try:
-            data = VectorStoreData(self.store, self.ids, self.documents, self.metadatas)
+            data = FaissVectorStoreData(self.store, self.ids, self.documents, self.metadatas)
             raw: bytes = pickle.dumps(data)
             return pickletools.optimize(raw)
         except Exception as e:
             raise RuntimeError(f"Failed to serialize vector store: {str(e)}")
 
     @classmethod
-    def from_bytes(cls,data: bytes, sentence_transformers: str) -> "VectorStore":
+    def from_bytes(cls,data: bytes, sentence_transformers: str) -> "FaissVectorStore":
         """
-        Deserializes a VectorStore from bytes.
+        Deserializes a FaissVectorStore from bytes.
 
         Args:
             raw (bytes): Serialized vector store.
 
         Returns:
-            VectorStore: The deserialized instance.
+            FaissVectorStore: The deserialized instance.
         """
         try:
             data = pickle.loads(data)
@@ -168,9 +171,8 @@ class VectorStore():
             raise RuntimeError(f"Failed to deserialize vector store: {str(e)}")
 
 
-from dataclasses import dataclass
 @dataclass
-class VectorStoreData():
+class FaissVectorStoreData(VectorStoreData):
     """
     Dataclass for storing vector store data for serialization.
     """

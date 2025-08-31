@@ -3,6 +3,8 @@ from .db import qaapDB, flatfiledb
 from .app.ai.methods import initialize_vector_store
 from .app.ai.methods import query as _query
 from .app.ai.interfaces import AIInterface, ollama
+from .app.ai import VectorStore
+from .app.ai.vectorstore import FaissVectorStore
 from .web.api import server as _server
 from .web import activate_integrated_frontend
 from .globals import globals
@@ -50,11 +52,12 @@ def init(
         database: str | qaapDB = "data/qaap_db",
         ai: AIInterface | str = "qwen3:0.6b",
         embeddings_model: str = "Qwen/Qwen3-Embedding-0.6B",
+        vectorstore: type = FaissVectorStore,
         object_of_search: str = "solutions",
         system_prompt: str = default_system_prompt,
         api_server: int | dict = 8080,
         allow_post: bool = False,
-        frontend: bool = True,
+        frontend: bool | str = True,
         catalog: bool = True,
         attributes: list[str] = None
 ):
@@ -67,8 +70,9 @@ def init(
 
     Args:
         database (str | ottoDB.ottoDB, optional): The database to use. Can be a path to a flat file database (uses a FlatFileDB instance) or an instance of ottoDB. Defaults to "data/qaap_db".
-        ai (AIInterface.AIInterface | str, optional): The AI interface to use. Can be a model name (uses an OllamaAIInterface) or an instance of AIInterface. Defaults to "qwen3:0.6b".
+        ai (AIInterface | str, optional): The AI interface to use. Can be a model name (uses an OllamaAIInterface) or an instance of AIInterface. Defaults to "qwen3:0.6b".
         embeddings_model (str, optional): The embeddings model to use via SentenceTransformer. Can be a local path or HuggingFace project name. Defaults to "Qwen3-Embedding-0.6B".
+        vectorstore (VectorStore type, optional): The VectorStore class to use. Must be a child class of qA_Ap.app.ai.VectorStore. Defaults to FaissVectorStore.
         object_of_search (str, optional): The object of search. Will be replaced in the system_prompt. Defaults to "solutions".
         system_prompt (str, optional): The system prompt to use. Defaults to qA_Ap.default_system_prompt.
         api_server (int | dict | False, optional): The port on wich to run the API server (bottle.py). If a dictionary is provided, it will be used as the server configuration. If False the server is not run. Defaults to 8080.
@@ -88,13 +92,11 @@ def init(
         globals.database = database
     elif isinstance(database, str):
         globals.database = flatfiledb.FlatFileDB(database)
-    pass
 
     if isinstance(ai, AIInterface):
         globals.ai_interface = ai
     elif isinstance(ai, str):
         globals.ai_interface = ollama.OllamaAIInterface(model_name=ai)
-    pass
 
     if allow_post == True:
         _server.post_auth_check = lambda: True
@@ -106,16 +108,19 @@ def init(
         for attribute in attributes:
             compile_attribute(attribute)
     
+    if issubclass(vectorstore,VectorStore):
+        globals.vectorstoreclass = vectorstore
+
     initialize_vector_store()
     
-    if frontend == True:
+    if isinstance(frontend, bool) and frontend == True:
         activate_integrated_frontend()
+    elif isinstance(frontend, str):
+        activate_integrated_frontend(frontend)
 
     if api_server:
-        
         if isinstance(api_server, dict):
             _server.run(**dict)
-
         if isinstance(api_server,int):
             _server.run(host='0.0.0.0', port=api_server)
 

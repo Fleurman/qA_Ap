@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 
 import oyaml
-from pdoc import pdoc
 from bottle import Bottle, response, request, HTTPResponse, static_file
 
 from ..globals import globals

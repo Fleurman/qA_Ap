@@ -1,6 +1,6 @@
 from ..db import qaapDB
 from ..app.ai.interfaces import AIInterface
-from ..app.ai.vectorstore import VectorStore
+from ..app.ai import VectorStore
 
 class _globals():
     """
@@ -14,6 +14,7 @@ class _globals():
     database: qaapDB = None
     ai_interface: AIInterface = None
     vectorstore: VectorStore = None
+    vectorstoreclass: type = None
 
     path_to_emmbeddings_model: str = ""
     system_prompt: str = ""

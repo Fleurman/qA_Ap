@@ -1,5 +1,4 @@
 from ...globals import globals
-from .vectorstore import VectorStore
 from .interfaces import AIStreamResponse
 
 def vectorize_documents() -> None:
@@ -12,7 +11,7 @@ def vectorize_documents() -> None:
     try:
         documents = globals.database.get_all_documents_data()
         print(f"{len(documents)} documents")
-        globals.vectorstore = VectorStore(
+        globals.vectorstore = globals.vectorstoreclass(
             documents=documents, 
             sentence_transformers=globals.path_to_emmbeddings_model
         )
@@ -28,7 +27,7 @@ def initialize_vector_store() -> None:
     """
     try:
         bytes_data = globals.database.get_vector_store()
-        globals.vectorstore = VectorStore.from_bytes(
+        globals.vectorstore = globals.vectorstoreclass.from_bytes(
             data=bytes_data, 
             sentence_transformers=globals.path_to_emmbeddings_model
         )
