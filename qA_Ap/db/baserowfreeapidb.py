@@ -356,7 +356,7 @@ class BaseRowFreeApiDB(qaapDB):
         icon = ""
         documents = self._get(
             table=self.tables.DOCUMENTS,
-            filters=[("title", document_title)]
+            filters=[("document_title", document_title)]
         )
         if len(documents) > 0:
             document_content = documents[0]["content"]
@@ -518,7 +518,7 @@ class BaseRowFreeApiDB(qaapDB):
         response = self._post(
             table=self.tables.DOCUMENTS,
             body={
-                "title": document_title,
+                "document_title": document_title,
                 "content": content
             }
         )
@@ -678,7 +678,7 @@ class BaseRowFreeApiDB(qaapDB):
     def get_all_documents_data(self) -> list[dict[str,str]]:
         """
             Retrieves all documents data from the database.
-            Each document is represented as a dictionary with "content" and "title" keys.
+            Each document is represented as a dictionary with "content" and "document_title" keys.
 
             Returns:
                 list[dict[str,str]]: A list of dictionaries containing the content and title of each document.
@@ -694,13 +694,13 @@ class BaseRowFreeApiDB(qaapDB):
         )
         if len(documents) > 0:
             for document in documents:
-                title = document["title"]
+                title = document["document_title"]
                 content = document["content"]
                 document_object: Document = Document.from_text(title,content)
                 docs.append(
                     {
                         "content":content,
-                        "title": title,
+                        "document_title": title,
                         "metadata": document_object.metadatas
                     }
                 )
