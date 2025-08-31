@@ -16,7 +16,7 @@ def compile_catalog() -> None:
         data: list[dict[str, str]] = globals.database.get_all_documents_data()
 
         documents: list[dict] = [
-            Document.from_text(raw["document_title"], raw["content"]).catalog_entry for raw in data
+            Document.from_text(raw["title"], raw["content"]).catalog_entry for raw in data
         ]
     
         globals.database.write_catalog(json.dumps(documents))

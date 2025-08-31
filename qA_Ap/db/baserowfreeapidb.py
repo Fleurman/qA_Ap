@@ -700,7 +700,7 @@ class BaseRowFreeApiDB(qaapDB):
                 docs.append(
                     {
                         "content":content,
-                        "document_title": title,
+                        "title": title,
                         "metadata": document_object.metadatas
                     }
                 )
