@@ -442,9 +442,9 @@ class QAAPApp {
 
     async loadDocumentContent(title) {
         try {
-            const document = await this.qaap.getPostByName(title);
+            const post = await this.qaap.getPostByName(title);
             const modalText = document.querySelector('.document-modal-text');
-            modalText.textContent = document.content || 'No content available';
+            modalText.textContent = post.content || 'No content available';
 
             // Replace the load button with a message
             const loadButton = document.getElementById('load-document-content');
