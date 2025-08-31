@@ -6,8 +6,7 @@ from ..classes import Document
 from ..classes.errors.db import FileAlreadyExistsError, WriteInDatabaseError
 from . import qaapDB
 
-
-class BaseRowFreeApiDBTables(StrEnum):
+class BaseRowFreeApiDBTables():
     DOCUMENTS = ""
     DOCUMENTS_MEDIAS = ""
     NOTES = ""
@@ -19,6 +18,9 @@ class BaseRowFreeApiDBTables(StrEnum):
         self.DOCUMENTS = documents
         self.DOCUMENTS_MEDIAS = documents_medias
         self.NOTES = notes
+        self.NOTES_MEDIAS = notes_medias
+        self.SUMMARIES = summaries
+        self.RAG = rag
 
 
 class BaseRowFreeApiDB(qaapDB):
