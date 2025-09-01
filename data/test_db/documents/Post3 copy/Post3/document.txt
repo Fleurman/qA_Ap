@@ -1,5 +1,0 @@
-couleurs: pink
-
-###
-
-This is a pink post

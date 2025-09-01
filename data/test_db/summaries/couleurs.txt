@@ -1,3 +1,5 @@
-pink
+noir
+orange
 rouge
+pink
 bleu

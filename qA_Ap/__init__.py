@@ -4,7 +4,7 @@ from .app.ai.methods import initialize_vector_store
 from .app.ai.methods import query as _query
 from .app.ai.interfaces import AIInterface, ollama
 from .app.ai import VectorStore
-from .app.ai.vectorstore import FaissVectorStore
+from .app.ai.faissvectorstore import FaissVectorStore
 from .web.api import server as _server
 from .web import activate_integrated_frontend
 from .globals import globals

@@ -59,7 +59,7 @@ class FaissVectorStore(VectorStore):
             metadata = []
             for document in documents:
                 raw_chunks = text_splitter.chunks(document["content"])
-                print(f"{len(raw_chunks)} chunks")
+                print(f"Document '{document["title"]}' divided into {len(raw_chunks)} chunks",end=", ")
                 for i, chunk in enumerate(raw_chunks):
                     chunks.append(chunk)
                     ids.append(f"{document['title']}-{i}")
@@ -69,6 +69,7 @@ class FaissVectorStore(VectorStore):
                     meta_entry.update(document["metadata"])
                     metadata.append(meta_entry)
 
+            print("")
             embeddings = self.model.encode(chunks)
             embeddings = np.array(embeddings).astype('float32')
             faiss.normalize_L2(embeddings)
@@ -94,7 +95,7 @@ class FaissVectorStore(VectorStore):
             RuntimeError: If the query fails.
         """
         if self.store is None or self.documents is None:
-            print("WARNING: Vector store is empty ! [qA_Ap.app.ai.vectorstore.VectorStore.query]")
+            print("WARNING: Vector store is empty ! [qA_Ap.app.ai.faissvectorstore.VectorStore.query]")
             return []
         
         try:
