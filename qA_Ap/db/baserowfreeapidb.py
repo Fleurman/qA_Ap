@@ -66,7 +66,7 @@ class BaseRowFreeApiDB(qaapDB):
         tables (BaseRowFreeApiDBTables): An instance of BaseRowFreeApiDBTables containing the IDs of the tables.
     """
 
-    def __init__(self, token: str, tables: BaseRowFreeApiDBTables):
+    def __init__(self, key: str, tables: BaseRowFreeApiDBTables):
         """
             Initializes a BaseRowDB instance (inherits from qA_ApDB).
 
@@ -75,7 +75,7 @@ class BaseRowFreeApiDB(qaapDB):
                 tables (BaseRowFreeApiDBTables): An instance of BaseRowFreeApiDBTables containing the IDs of the tables.
         """
         qaapDB.__init__(self)
-        self.token = token
+        self.key = key
         self.tables = tables
 
     def _filter_by_fields_value(self, fields: list[tuple[str,str]], orfields: list[tuple[str,str]] = []) -> str:
@@ -161,7 +161,7 @@ class BaseRowFreeApiDB(qaapDB):
             params["size"] = size
 
         headers = {
-            "Authorization": f"Token {self.token}"
+            "Authorization": f"Token {self.key}"
         }
 
         try:
@@ -191,7 +191,7 @@ class BaseRowFreeApiDB(qaapDB):
             response = requests.post(
                 f"https://api.baserow.io/api/database/rows/table/{table}/{"batch/" if batchmode else ""}?user_field_names=true",
                 headers={
-                    "Authorization": f"Token {self.token}",
+                    "Authorization": f"Token {self.key}",
                     "Content-Type": "application/json"
                 },
                 json=body
@@ -218,7 +218,7 @@ class BaseRowFreeApiDB(qaapDB):
             response = requests.patch(
                 f"https://api.baserow.io/api/database/rows/table/{table}/{row_id}/?user_field_names=true",
                 headers={
-                    "Authorization": f"Token {self.token}"
+                    "Authorization": f"Token {self.key}"
                 },
                 json={
                     field_name: content

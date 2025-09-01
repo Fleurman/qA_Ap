@@ -3,7 +3,7 @@ data/llms/
 .vscode/
 .continue/
 **/__pycache__/
-test.ipynb
+keys.json
 README-PYPI.md
 README-pdf.md
 diagram.png
