@@ -67,13 +67,14 @@ cerebras-cloud-sdk >= 1.46.0    # required if you use the CerebrasAIInterface
 
 ## 📁 Package Structure
 ```python
-qA_Ap # setup method and aliases to core components
+qA_Ap # init method and aliases to core components
 
 qA_Ap.app # documents manipulation methods
 
-qA_Ap.app.catalog # Catalog related functions
+qA_Ap.app.catalog # Catalog related methods
 
-qA_Ap.app.ai # internal Vectorstore class for the RAG
+qA_Ap.app.ai # abstract Vectorstore class
+qA_Ap.app.ai.faissvectorstore # FaissVectorstore class
 qA_Ap.app.ai.interfaces # abstract classes for AI interface
 qA_Ap.app.ai.interfaces.ollama # Ollama interface
 qA_Ap.app.ai.interfaces.cerebras # Cerebras 'personal tier' interface
@@ -87,15 +88,18 @@ qA_Ap.db # abstract class for database
 qA_Ap.db.baserowfreeapi # Baserow free API database class
 qA_Ap.db.flatfiledb # flat file stuctured database class
 
-qA_Ap.state # global objects used accross the app
+qA_Ap.globals # contains the 'globals' object used accross the app
 
 qA_Ap.web # controls integrated frontend view
 qA_Ap.web.api # API server
+
+qA_Ap.cli # commande line interface methods
 ```
 
 ## 🛠️ How to use
 
 You can find a raw documentation [here](https://martin.surlesinternets.ch/qA_Ap/docs/) _(it will be refined)_
+When running, the API documentation is available at `/api/docs`.
 
 ### Python Setup
 1. Install Python v3.10+ _(3.12 recommended)_
@@ -143,7 +147,7 @@ Customize your setup with these parameters:
 
 - **auth** _(bool, optional)_: Whether to enable authentication on the API server POST endpoints. Defaults to `False`.
 
-- **frontend** _(bool, optional)_: Whether to run the integrated frontend interface. Defaults to `False`.
+- **frontend** _(bool | str, optional)_: Whether to run the integrated frontend interface. If a str is passed it will be used as the path to the frontend files folder. Defaults to `False`.
 
 ### Core objects
 
