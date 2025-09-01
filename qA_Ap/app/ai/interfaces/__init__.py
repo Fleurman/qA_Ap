@@ -5,7 +5,7 @@ class AIInterface(ABC):
     Abstract base class for AI interfaces.
     """
     @abstractmethod
-    def query(self, prompt: str, history: list[dict[str,str]] = None, metadatas: dict = None) -> None:
+    def query(self, prompt: str, history: list[dict[str,str]] = None, metadata: dict = None) -> None:
         pass
 
     def format_history(self, history: list[dict[str,str]]):

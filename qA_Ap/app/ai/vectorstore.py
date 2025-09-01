@@ -27,14 +27,14 @@ class FaissVectorStore(VectorStore):
             raise RuntimeError(f"Failed to load embedding model: {str(e)}")
         if documents:
             try:
-                self.store, self.documents, self.ids, self.metadatas = self._setup(documents)
+                self.store, self.documents, self.ids, self.metadata = self._setup(documents)
             except Exception as e:
                 raise RuntimeError(f"Failed to set up vector store: {str(e)}")
         else:
             self.documents = []
             self.store = None
             self.ids = []
-            self.metadatas = []
+            self.metadata = []
 
     def _setup(self, documents: list[dict[str, str]]) -> tuple[faiss.IndexFlatL2, list[str], list[str], list[dict[str, str]]]:
         """
@@ -56,7 +56,7 @@ class FaissVectorStore(VectorStore):
             text_splitter = TextSplitter(1000)
             chunks = []
             ids = []
-            metadatas = []
+            metadata = []
             for document in documents:
                 raw_chunks = text_splitter.chunks(document["content"])
                 print(f"{len(raw_chunks)} chunks")
@@ -67,7 +67,7 @@ class FaissVectorStore(VectorStore):
                         "title": document["title"],
                     }
                     meta_entry.update(document["metadata"])
-                    metadatas.append(meta_entry)
+                    metadata.append(meta_entry)
 
             embeddings = self.model.encode(chunks)
             embeddings = np.array(embeddings).astype('float32')
@@ -75,7 +75,7 @@ class FaissVectorStore(VectorStore):
             store = faiss.IndexFlatL2(embeddings.shape[1])
             store.add(embeddings)
 
-            return store, chunks, ids, metadatas
+            return store, chunks, ids, metadata
         except Exception as e:
             raise RuntimeError(f"Error during setup: {str(e)}")
     
@@ -108,7 +108,7 @@ class FaissVectorStore(VectorStore):
             for i, idx in enumerate(indices[0]):
                 results.append({
                     "document": self.documents[idx],
-                    "metadata": self.metadatas[idx],
+                    "metadata": self.metadata[idx],
                     "distance": distances[0][i]
                 })
 
@@ -125,9 +125,9 @@ class FaissVectorStore(VectorStore):
             str: JSON representation.
         """
         try:
-            return json.dumps({"ids":self.ids,"metadatas":self.metadatas,"documents":self.documents})
+            return json.dumps({"ids":self.ids,"metadata":self.metadata,"documents":self.documents})
         except Exception as e:
-            raise RuntimeError(f"Failed to serialize metadatas to JSON: {str(e)}")
+            raise RuntimeError(f"Failed to serialize metadata to JSON: {str(e)}")
 
 
     @property
@@ -139,7 +139,7 @@ class FaissVectorStore(VectorStore):
             bytes: Serialized vector store.
         """
         try:
-            data = FaissVectorStoreData(self.store, self.ids, self.documents, self.metadatas)
+            data = FaissVectorStoreData(self.store, self.ids, self.documents, self.metadata)
             raw: bytes = pickle.dumps(data)
             return pickletools.optimize(raw)
         except Exception as e:
@@ -163,7 +163,7 @@ class FaissVectorStore(VectorStore):
                 sentence_transformers=sentence_transformers
             )
             instance.ids = data.ids
-            instance.metadatas = data.metadatas
+            instance.metadata = data.metadata
             instance.documents = data.documents
             instance.store = data.store
             return instance
@@ -179,4 +179,4 @@ class FaissVectorStoreData(VectorStoreData):
     store :faiss.IndexFlatL2
     ids: list[str]
     documents: list[str]
-    metadatas: list[dict[str,str]]
+    metadata: list[dict[str,str]]

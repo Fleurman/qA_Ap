@@ -14,7 +14,7 @@ class OllamaAIInterface(AIInterface):
         """
         self.model_name = model_name
 
-    def query(self, query: str, history: list[dict[str,str]] = None, metadatas: dict = None) -> AIStreamResponse:
+    def query(self, query: str, history: list[dict[str,str]] = None, metadata: dict = None) -> AIStreamResponse:
 
         messages = []
 
@@ -33,14 +33,14 @@ class OllamaAIInterface(AIInterface):
             stream=True
         )
 
-        return OllamaAIStreamResponse(stream, metadatas)
+        return OllamaAIStreamResponse(stream, metadata)
         
 
 class OllamaAIStreamResponse(AIStreamResponse):
     """
     Concrete AI stream response for Ollama.
     """
-    def __init__(self, stream, metadatas):
+    def __init__(self, stream, metadata):
         """
         Initializes the Ollama AI stream response.
         
@@ -48,7 +48,7 @@ class OllamaAIStreamResponse(AIStreamResponse):
             stream: The stream from the Ollama client.
         """
         self.stream = stream
-        self.metadatas = metadatas
+        self.metadata = metadata
 
     def __iter__(self):
         """

@@ -13,7 +13,7 @@ class CerebrasAIInterface(AIInterface):
         self.client = Cerebras(api_key=key)
         self.model_name = model_name
 
-    def query(self, query: str, history: list[dict[str,str]] = None, metadatas: dict = None) -> None:
+    def query(self, query: str, history: list[dict[str,str]] = None, metadata: dict = None) -> None:
 
         messages = []
 
@@ -34,11 +34,11 @@ class CerebrasAIInterface(AIInterface):
             top_p=1
         )
 
-        return CerebrasAIStreamResponse(stream, metadatas)
+        return CerebrasAIStreamResponse(stream, metadata)
 
 
 class CerebrasAIStreamResponse(AIStreamResponse):
-    def __init__(self, stream, metadatas):
+    def __init__(self, stream, metadata):
         """
         Initializes the Cerebras AI stream response.
         
@@ -46,7 +46,7 @@ class CerebrasAIStreamResponse(AIStreamResponse):
             stream: The stream from the Cerebras client.
         """
         self.stream = stream
-        self.metadatas = metadatas
+        self.metadata = metadata
     
     def __iter__(self):
         """

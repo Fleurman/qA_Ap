@@ -116,7 +116,7 @@ class VectorStoreData():
     Returns:
         list[str]: The list of document chunks.
     """
-    metadatas: list[dict[str,str]]
+    metadata: list[dict[str,str]]
     """
     The list of metadata dictionaries.
 

@@ -233,23 +233,23 @@ class QAAPApp {
 
         // Set icon
         const iconElement = element.querySelector('.document-icon img');
-        iconElement.src = doc.metadatas.icon
-            ? doc.metadatas.icon
+        iconElement.src = doc.metadata.icon
+            ? doc.metadata.icon
             : 'static/icon.png';
         iconElement.alt = `${doc.title} icon`;
 
         // Add attributes
         const attributesContainer = element.querySelector('.document-attributes');
-        if (doc.metadatas.tags && doc.metadatas.tags.length > 0) {
-            doc.metadatas.tags.forEach(tag => {
+        if (doc.metadata.tags && doc.metadata.tags.length > 0) {
+            doc.metadata.tags.forEach(tag => {
                 const attrElement = this.createAttributeElement(tag);
                 attributesContainer.appendChild(attrElement);
             });
         }
 
         // Add external link if available
-        if (doc.metadatas.links && doc.metadatas.links.length > 0) {
-            const linkElement = this.createExternalLinkElement(doc.metadatas.links[0]);
+        if (doc.metadata.links && doc.metadata.links.length > 0) {
+            const linkElement = this.createExternalLinkElement(doc.metadata.links[0]);
             titleElement.insertAdjacentElement("beforebegin",linkElement);
         }
 
@@ -405,12 +405,12 @@ class QAAPApp {
 
             // Set modal content
             modalTitle.textContent = doc.title;
-            modalIcon.src = doc.metadatas.icon || 'static/icon.png';
+            modalIcon.src = doc.metadata.icon || 'static/icon.png';
             modalText.textContent = doc.content || 'No content available';
 
             // Clear and populate metadata
             modalMetadata.innerHTML = '';
-            for (let [key, value] of Object.entries(doc.metadatas)) {
+            for (let [key, value] of Object.entries(doc.metadata)) {
                 if (key !== 'icon' && key !== 'notes') {
                     const li = document.createElement('li');
                     value = value.map(val=>{
@@ -565,9 +565,9 @@ class QAAPApp {
         } else {
             // Filter documents based on active filters
             this.filteredDocuments = this.catalog.filter(doc => {
-                if (!doc.metadatas.tags) return false;
+                if (!doc.metadata.tags) return false;
                 return filters.every(filter =>
-                    doc.metadatas.tags.some(tag => tag.toLowerCase().includes(filter))
+                    doc.metadata.tags.some(tag => tag.toLowerCase().includes(filter))
                 );
             });
         }

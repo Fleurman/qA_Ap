@@ -701,7 +701,7 @@ class BaseRowFreeApiDB(qaapDB):
                     {
                         "content":content,
                         "title": title,
-                        "metadata": document_object.metadatas
+                        "metadata": document_object.metadata
                     }
                 )
         else:

@@ -287,8 +287,8 @@ class QAAP {
                 if(typeof raw == "string"){
                     if(raw.startsWith("#METADATA#")){
                         console.log("METAS")
-                        let metadatas = JSON.parse(raw.replace("#METADATA#",""));
-                        callback("METADATA",metadatas);
+                        let metadata = JSON.parse(raw.replace("#METADATA#",""));
+                        callback("METADATA",metadata);
                         return reader.read().then(pump);
                     }else{
                         callback(raw);

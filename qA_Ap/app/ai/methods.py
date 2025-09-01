@@ -68,12 +68,12 @@ def _metadata_from_query_results(results: list[dict[str, any]]) -> str:
     Returns:
         str: Formatted context string.
     """
-    metadatas = {}
+    metadata = {}
 
     for result in results:
-        metadatas[result["metadata"]["title"]] = result["metadata"]
+        metadata[result["metadata"]["title"]] = result["metadata"]
         
-    return metadatas
+    return metadata
 
 def query(query: str, history: list[dict[str,str]] = None, include_metadata: bool = False) -> AIStreamResponse:
     """
@@ -102,8 +102,8 @@ def query(query: str, history: list[dict[str,str]] = None, include_metadata: boo
             question=query
         )
 
-        metadatas = _metadata_from_query_results(results) if include_metadata else None
-        response: AIStreamResponse = globals.ai_interface.query(prompt,history,metadatas)
+        metadata = _metadata_from_query_results(results) if include_metadata else None
+        response: AIStreamResponse = globals.ai_interface.query(prompt,history,metadata)
 
         return response
     except Exception as e:

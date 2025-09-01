@@ -272,9 +272,9 @@ def post_post() -> str:
             return json.dumps({"error": "Missing required fields '[title, content]'"})
         title = data["title"]
         content = data["content"]
-        metadatas = data.get("metadata", False)
-        if metadatas:
-            yaml_metas = oyaml.safe_dump(metadatas)
+        metadata = data.get("metadata", False)
+        if metadata:
+            yaml_metas = oyaml.safe_dump(metadata)
             content = f"{yaml_metas}\n###\n\n{content}"
         globals.database.write_post(title, content, data.get("medias", []))
         return json.dumps({"message": f"The document {title} is created"})
@@ -328,10 +328,10 @@ def post_comment() -> str:
         post_title = data["post_title"]
         note_title = data["note_title"]
         content = data["content"]
-        metadatas = data.get("metadata", False)
+        metadata = data.get("metadata", False)
 
-        if metadatas:
-            yaml_metas = oyaml.safe_dump(metadatas)
+        if metadata:
+            yaml_metas = oyaml.safe_dump(metadata)
             content = f"{yaml_metas}\n###\n\n{content}"
 
         globals.database.write_comment(
@@ -525,7 +525,7 @@ def stream():
     response.headers['Content-Type'] = 'text/event-stream'
     
     if include_metadata:
-        yield f"{"#METADATA#"}{json.dumps(stream.metadatas)}"
+        yield f"{"#METADATA#"}{json.dumps(stream.metadata)}"
 
     for chunk in stream:
         if chunk:

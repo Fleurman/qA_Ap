@@ -22,10 +22,10 @@ class Document:
         text -> str: Returns the text representation of the document as it is store in the database.
     """
     
-    def __init__(self, title=None, content=None, metadatas={}):
+    def __init__(self, title=None, content=None, metadata={}):
         self.title = title
         self.content = content
-        self.metadatas = metadatas
+        self.metadata = metadata
     
     @classmethod
     def from_text(cls, title: str, raw_content: str) -> 'Document':
@@ -34,13 +34,13 @@ class Document:
 
             # If a separator is found in the file parse the yaml metadata before it
             if separator:       
-                metadatas = oyaml.safe_load(metas)
+                metadata = oyaml.safe_load(metas)
             else:
-                metadatas = {}
+                metadata = {}
 
             content = text.strip()
 
-            return cls(title=title, content=content, metadatas=metadatas)
+            return cls(title=title, content=content, metadata=metadata)
         except Exception as e:
             print("Le fichier est mal formatté",e)
     
@@ -50,8 +50,8 @@ class Document:
             data = json.loads(raw_content)
             title = data['title']
             content = data['content']
-            metadatas = data['metadatas']
-            return cls(title=title, content=content, metadatas=metadatas)
+            metadata = data['metadata']
+            return cls(title=title, content=content, metadata=metadata)
         except Exception as e:
             print("Le JSON est invalide",e)
     
@@ -60,7 +60,7 @@ class Document:
         entry = {
             'title': self.title,
             'content': self.content[:300],
-            'metadatas':self.metadatas
+            'metadata':self.metadata
         }
         return entry
     
@@ -69,13 +69,13 @@ class Document:
         data = {
             'title': self.title,
             'content': self.content,
-            'metadatas':self.metadatas
+            'metadata':self.metadata
         }
         return data
     
     @property
     def text(self) -> str:
-        yaml_metas = oyaml.safe_dump(self.metadatas)
+        yaml_metas = oyaml.safe_dump(self.metadata)
         return f"{yaml_metas}\n###\n\n{self.content}"
     
 
@@ -105,7 +105,7 @@ class Note:
                 Returns the note data as a string containing YAML metadata and text content.
     """
 
-    def __init__(self, post_title: str, note_title: str, content: str, metadatas: dict[str,str] = None):
+    def __init__(self, post_title: str, note_title: str, content: str, metadata: dict[str,str] = None):
         """
             Initializes a new instance of the Note class.
 
@@ -118,7 +118,7 @@ class Note:
         self.document = post_title
         self.note_title = note_title
         self.content = content
-        self.metadatas = metadatas
+        self.metadata = metadata
 
     @classmethod
     def from_text(cls, post_title: str, note_title: str, raw_content: str) -> 'Note':
@@ -139,9 +139,9 @@ class Note:
 
             # If a separator is found in the file parse the yaml metadata before it
             if separator:       
-                metadatas = oyaml.safe_load(metas)
+                metadata = oyaml.safe_load(metas)
             else:
-                metadatas = {}
+                metadata = {}
 
             content = text.strip()
 
@@ -149,7 +149,7 @@ class Note:
                 post_title=post_title, 
                 note_title=note_title, 
                 content=content, 
-                metadatas=metadatas
+                metadata=metadata
             )
         except Exception as e:
             print("Le fichier est mal formatté",e)
@@ -174,7 +174,7 @@ class Note:
                 document = data['document'], 
                 note_title = data['note_title'], 
                 content = data['content'],
-                metadatas = data['metadatas']
+                metadata = data['metadata']
                 )
         except Exception as e:
             print("Le JSON est invalide",e)
@@ -191,7 +191,7 @@ class Note:
             'document': self.document,
             'note_title': self.note_title,
             'content': self.content,
-            'metadatas': self.metadatas
+            'metadata': self.metadata
         }
         return data
 
@@ -203,5 +203,5 @@ class Note:
             Returns:
                 str: A string containing YAML metadata and text content.
         """
-        yaml_metas = oyaml.safe_dump(self.metadatas)
+        yaml_metas = oyaml.safe_dump(self.metadata)
         return f"{yaml_metas}\n###\n\n{self.content}"

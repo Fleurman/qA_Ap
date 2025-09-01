@@ -20,6 +20,8 @@ def compile_catalog() -> None:
         ]
     
         globals.database.write_catalog(json.dumps(documents))
+
+        print(f"{len(data)} documents compiled successfully")
     except Exception as e:
         raise RuntimeError(f"Failed to compile catalog: {str(e)}")
 
@@ -34,7 +36,7 @@ def compile_attribute(attribute: str) -> None:
     """
     try:
         catalog = json.loads(globals.database.get_catalog())
-        values: list[list[str]|str] = [document["metadatas"][attribute] for document in catalog if (attribute in document["metadatas"])]
+        values: list[list[str]|str] = [document["metadata"][attribute] for document in catalog if (attribute in document["metadata"])]
         
         flattened = []
         
@@ -71,7 +73,14 @@ def find_documents_by_metadata(attribute: str, value: str) -> list[dict]:
         catalog = json.loads(globals.database.get_catalog())
         results = [
             document for document in catalog
-            if attribute in document["metadatas"] and value in document["metadatas"][attribute]
+            if attribute in document["metadata"]
+                and (
+                        ( 
+                            isinstance(document["metadata"][attribute],list) 
+                            and value in document["metadata"][attribute]
+                        )
+                        or value == document["metadata"][attribute]
+                )
         ]
         return results
     except Exception as e:

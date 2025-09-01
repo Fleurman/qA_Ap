@@ -1,6 +1,0 @@
-screenshots:
-- screen1
-
-###
-
-OKOK

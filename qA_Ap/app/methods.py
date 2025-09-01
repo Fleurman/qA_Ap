@@ -43,7 +43,7 @@ def register_new_comment(note: Note) -> bool:
     """
     try:
         database.write_comment(
-            note.document, note.note_title, note.metadatas, note.text
+            note.document, note.note_title, note.metadata, note.text
         )
     except FileAlreadyExistsError as e:
         raise ExistsError(f"Note already exists: {str(e)}")
@@ -71,7 +71,7 @@ def register_new_post(document :Document) -> bool:
     """
     try:
         database.write_post(
-            document.title, document.icon, document.metadatas, document.content
+            document.title, document.icon, document.metadata, document.content
         )
     except FileNotFoundError as e:
         raise NotFoundError(f"Document '{document.title}' not found.")
