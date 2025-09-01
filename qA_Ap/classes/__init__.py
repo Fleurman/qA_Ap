@@ -74,7 +74,13 @@ class Document:
         return data
     
     @property
-    def to_text(self) -> str:
+    def text(self) -> str:
+        """
+            Returns the document data as a string containing YAML metadata and text content.
+
+            Returns:
+                str: A string containing YAML metadata and text content.
+        """
         yaml_metas = oyaml.safe_dump(self.metadata)
         return f"{yaml_metas}\n###\n\n{self.content}"
     
@@ -196,7 +202,7 @@ class Note:
         return data
 
     @property
-    def to_text(self) -> str:
+    def text(self) -> str:
         """
             Returns the note data as a string containing YAML metadata and text content.
 

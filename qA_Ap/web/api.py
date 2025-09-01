@@ -143,7 +143,7 @@ def get_document_by_name(name: str) -> str:
     response.headers['Cache-Control'] = 'no-cache'
     try:
         document = globals.database.get_document(name)
-        return json.dumps(Document.from_text(name, document).dict)
+        return json.dumps(Document.from_text(name, document).to_dict)
     except Exception as e:
         response.status = 404
         return json.dumps({"error": str(e)})
@@ -178,7 +178,7 @@ def get_notes_for_post(post_title: str) -> str:
     response.headers['Cache-Control'] = 'no-cache'
     try:
         notes = globals.database.get_notes_for_post(post_title)
-        return json.dumps([Note.from_text(note_title, document, content).dict for (content, document, note_title) in notes])
+        return json.dumps([Note.from_text(note_title, document, content).to_dict for (content, document, note_title) in notes])
     except Exception as e:
         response.status = 500
         return json.dumps({"error": str(e)})
