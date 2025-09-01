@@ -5,6 +5,7 @@ data/llms/
 **/__pycache__/
 test.ipynb
 README-PYPI.md
+README-pdf.md
 diagram.png
 pyproject.toml
 app.py

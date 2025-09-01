@@ -29,7 +29,8 @@ class QAAPApp {
         this.qaap = new QAAP();
         this.catalog = []; // Store the full catalog in memory
         this.filteredDocuments = []; // Store filtered documents
-
+        
+        this.inputHistory = [];
         try{
             const ih = localStorage.getItem("inputHistory");
             if(ih != null){

@@ -65,7 +65,7 @@ class Document:
         return entry
     
     @property
-    def dict(self) -> dict:
+    def to_dict(self) -> dict:
         data = {
             'title': self.title,
             'content': self.content,
@@ -74,7 +74,7 @@ class Document:
         return data
     
     @property
-    def text(self) -> str:
+    def to_text(self) -> str:
         yaml_metas = oyaml.safe_dump(self.metadata)
         return f"{yaml_metas}\n###\n\n{self.content}"
     
@@ -180,7 +180,7 @@ class Note:
             print("Le JSON est invalide",e)
 
     @property
-    def dict(self) -> dict:
+    def to_dict(self) -> dict:
         """
             Returns the note data as a JSON string.
 
@@ -196,7 +196,7 @@ class Note:
         return data
 
     @property
-    def text(self) -> str:
+    def to_text(self) -> str:
         """
             Returns the note data as a string containing YAML metadata and text content.
 
